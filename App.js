@@ -10,11 +10,9 @@ import React from 'react';
 import {StyleSheet} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import TabNavigator from './src/navigation/navigation';
-import App1 from './src/navigation/sampleNavigation/index'
 const App = () =>  {
   return (
     <TabNavigator />
-    // <App1 />
   );
 };
 

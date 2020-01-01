@@ -1,6 +1,6 @@
 import React from 'react';
 // import { StyleSheet, View } from 'react-native';
-import { Alert, StyleSheet, Text, View, TouchableOpacity,PermissionsAndroid,Image } from 'react-native';
+import { Alert, StyleSheet, Text, View, TouchableOpacity,PermissionsAndroid,Image,Platform,Permission} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import MapView,{ PROVIDER_GOOGLE } from 'react-native-maps';
 import { Marker } from 'react-native-maps';
@@ -27,27 +27,34 @@ class Map extends React.Component{
 
 
   requestPermission = async() => {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-        {
-          title: 'Your Location',
-          message:
-            'We can Use Your Location  ' +
-            'so you can Use Map Correctly.',
-          buttonNeutral: 'Ask Me Later',
-          buttonNegative: 'Cancel',
-          buttonPositive: 'OK',
-        },
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log('You can use the Location');
-        this.setState({permission:true})
-      } else {
-        console.log('Location permission denied');
+    if(Platform.OS === "ios") {
+  //  await Geolocation.requestAuthorization()
+   this.setState({permission:true})
+
+    }
+    else{
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+          {
+            title: 'Your Location',
+            message:
+              'We can Use Your Location  ' +
+              'so you can Use Map Correctly.',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          },
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          console.log('You can use the Location');
+          this.setState({permission:true})
+        } else {
+          console.log('Location permission denied');
+        }
+      } catch (err) {
+        console.warn(err);
       }
-    } catch (err) {
-      console.warn(err);
     }
   }
 
@@ -68,6 +75,8 @@ class Map extends React.Component{
               latitudeDelta: 0.0922,
               longitudeDelta: 0.0421,
             }
+            console.log(position, ' Position')
+
             this.setState({ location,region:updateRegien});
             this.Map.animateToRegion(updateRegien,1000)
 
@@ -83,11 +92,12 @@ class Map extends React.Component{
 
   render() {
     const {latitude,longitude} = this.state.region;
+    console.log(this.state.region, ' Render')
     return (
       <View style={styles.MainContainer}>
 
         <MapView
-        provider={PROVIDER_GOOGLE}
+        provider={Platform.OS === 'android'?PROVIDER_GOOGLE:''}
         ref={ref=>{this.Map = ref}}
           style={styles.mapStyle}
           showsUserLocation={true}

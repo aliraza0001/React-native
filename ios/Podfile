@@ -29,10 +29,16 @@ target 'sample_project' do
   pod 'ReactCommon/jscallinvoker', :path => "../node_modules/react-native/ReactCommon"
   pod 'ReactCommon/turbomodule/core', :path => "../node_modules/react-native/ReactCommon"
   pod 'Yoga', :path => '../node_modules/react-native/ReactCommon/yoga'
+  # React Native geolocation Dependencies
+  pod 'react-native-geolocation', path: '../node_modules/@react-native-community/geolocation'
+  pod 'GoogleMaps'
+  pod 'react-native-maps', path:'../node_modules/react-native-maps'
+  pod 'react-native-google-maps', path:'../node_modules/react-native-maps'
 
   pod 'DoubleConversion', :podspec => '../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec'
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
+
 
   target 'sample_projectTests' do
     inherit! :search_paths
